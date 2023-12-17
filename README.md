@@ -57,7 +57,9 @@ python3 radio.py
 ```
 
 For \*NIX users like myself the shebang should default to the user's default
-python3 binary so it be capable of running with a simple `./radio.py`.
+python3 binary so it be capable of running with a simple `./radio.py`. Or if
+you're as big a fan as me, you can make a bash alias so your tunes are never
+far away
 
 ### Station Recs
 
