@@ -14,12 +14,20 @@ have gone out of fashion. Internet radio is one of those cool-in-theory ideas
 that has a bunch of hurdles in the way of the actual experience. GUIs are old
 and outdated, station lists are pulled from weird sources, editing your saved
 stations can result in menu hell, internet services require accounts and try to
-upcharge you every step of the way. I wanted a radio player within the
-terminal, I wanted to choose and organize my radio stations myself in a
-plaintext file that I could work my vim-fu on, and I didn't want to see ads or
-get emails about my radio player. There are more feature-rich clients
-available, but if you just want to play some dang music while you're coding
-give this script a shot.
+upcharge you every step of the way. 
+
+I wanted a radio player within the terminal, I wanted to choose and organize my
+radio stations myself in a plaintext file that I could work my vim-fu on, and I
+didn't want to see ads or get emails about my radio player. There are more
+feature-rich clients available, but if you just want to play some dang music
+while you're coding give this script a shot.
+
+### About
+
+This script is heavily leaning on `VLC` for streaming the music and `fzf` for
+its easy terminal interfaces. I think the result is both lean and powerful.
+It's a simple and highly functional internet radio player for terminal power
+users. I'm sure there are many like it, but this one is mine.
 
 ## Install Dependencies
 
@@ -91,13 +99,34 @@ For those that need somewhere to start:
       here](https://help.abc.net.au/hc/en-us/articles/4402927208079-Where-can-I-find-direct-stream-URLs-for-ABC-Radio-stations-)
       or [time-delayed streams
       here](https://www.abc.net.au/triplej/time-delayed-streams/9445252)
+* Other ideas
+    * Google for some local stations. Find the nearest college radio and tune in.
 
 ## Limitations
 
+In a perfect world, I would be able to show some additional metadata about the
+songs now playing, but a cursory look into the possibility discouraged me. Too
+many stream formats/codecs, hardly any standardization. After seeing that VLC
+shelved the idea, I figured I stood little chance. You gotta pick your battles.
+
+One of the factors you can't get around is stream bitrate tradeoffs. The onus
+is on the user to find streams that can play well over their internet
+connection. One likes to hope that's not an issue these days, and one is often
+wrong.
+
 For minimalism's sake, I am hiding the VLC `stderr` output. This also means if
-something goes wrong, it will not tell you. A safe troubleshooting guide is to
-double check that the url is correct, and can be listened to with VLC's GUI.
-This is not the most complex script, and is designed for terminal users, so I'm
-not imagining that much can go wrong, and if it does, I'm betting the user can
-figure it out. Feel free to leave an issue if you like this but something's not
-working for you. Trying to keep this simple though.
+something goes wrong, it will not tell you. And if you do have a slower
+internet connection, it could be a few seconds before you can tell if it's
+working. A safe troubleshooting guide is to double check that the url is
+correct, and can be listened to with VLC outside of this script. This can be
+done in the GUI, or using the command line utility (& backbone of this script):
+
+```
+cvlc https://stream-url.com
+```
+
+This is not the most complex script (rly some eye candy for the command found
+above), and is designed for terminal users, so I'm not imagining that much can
+go wrong, and if it does, I'm betting the user can figure it out. Feel free to
+leave an issue if you like this but something's not working for you. Trying to
+keep this simple though.
