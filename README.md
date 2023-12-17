@@ -23,18 +23,18 @@ give this script a shot.
 
 ## Install Dependencies
 
-### Libraries
-
-For Python libraries, enter console at project folder and run: 
-
-`python3 -m pip install -r requirements.txt`
-
 ### Applications
 
 Install [python](https://www.python.org/),
 [fzf](https://github.com/junegunn/fzf), and
 [VLC](https://www.videolan.org/vlc/) for your platform of choice. All very
 handy if you don't use already.
+
+### Libraries
+
+For Python libraries, enter console at project folder and run: 
+
+`python3 -m pip install -r requirements.txt`
 
 ### This Repo
 
