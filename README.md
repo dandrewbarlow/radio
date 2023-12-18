@@ -114,6 +114,11 @@ is on the user to find streams that can play well over their internet
 connection. One likes to hope that's not an issue these days, and one is often
 wrong.
 
+Volume controls are another thing that the user has to do themselves. Either at
+a hardware level, a software mixer, whatever. This script embraces the live
+ethos of the radio with the bold and innovative decision to have no playback
+controls. It's either playing or it's not.
+
 For minimalism's sake, I am hiding the VLC `stderr` output. This also means if
 something goes wrong, it will not tell you. And if you do have a slower
 internet connection, it could be a few seconds before you can tell if it's

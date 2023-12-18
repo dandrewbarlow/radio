@@ -7,6 +7,8 @@
 
 # IMPORTS ##################################################
 
+# TODO switch to the python vlc lib that I found out about after making this
+
 # python libs
 import subprocess
 import os
