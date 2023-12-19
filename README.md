@@ -61,6 +61,7 @@ following:
 https://station-url.com
 ```
 
+
 Extraneous comments will not be parsed, but any lines starting with `http` will
 search the line above it for a commented name. If none is found, it will
 default to the stream url.
@@ -76,6 +77,12 @@ python3 binary so it be capable of running with a simple `./radio.py`. Or if
 you're as big a fan as me, you can make a bash alias so your tunes are never
 far away.
 
+### Tips
+
+Station selection uses fzf, a fuzzy finder. Meaning it searches for a loose
+match of input text. When writing the station name, you could put some genre
+tags, or really anything else you could use to quickly filter stations.
+
 ### Station Recs
 
 You gotta find the stream urls for yourself. This is the blessing/curse of this
@@ -86,8 +93,9 @@ For those that need somewhere to start:
 * Collections
     * [Soma FM](https://somafm.com/): ad free, and diverse selection of stations
     * [RadioBrowser](https://www.radio-browser.info/): FOSS database of
-      stations. I'm iffy on their quality, but I've heard enough people
-      recommend it that there's gotta be a reason.
+      stations. Their browsing categories are not great for finding stuff
+      without digging around imo, but if you know what you're looking for it's
+      a great tool to find stream urls.
     * [BBC
       Stations](https://en.everybodywiki.com/List_of_BBC_radio_stream_URLs):
       something for everybody
@@ -106,8 +114,9 @@ For those that need somewhere to start:
 
 In a perfect world, I would be able to show some additional metadata about the
 songs now playing, but a cursory look into the possibility discouraged me. Too
-many stream formats/codecs, hardly any standardization. After seeing that VLC
-shelved the idea, I figured I stood little chance. You gotta pick your battles.
+many stream formats/codecs, hardly any standardization. VLC can parse some
+basic information, but it's usually basically worthless as metadata. You gotta
+pick your battles.
 
 One of the factors you can't get around is stream bitrate tradeoffs. The onus
 is on the user to find streams that can play well over their internet
@@ -133,5 +142,5 @@ cvlc https://stream-url.com
 This is not the most complex script (rly some eye candy for the command found
 above), and is designed for terminal users, so I'm not imagining that much can
 go wrong, and if it does, I'm betting the user can figure it out. Feel free to
-leave an issue if you like this but something's not working for you. Trying to
-keep this simple though.
+leave an issue if you like this but something's going wrong. Trying to keep
+this simple though.
