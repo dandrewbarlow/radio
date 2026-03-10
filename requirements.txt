@@ -1,4 +1,0 @@
-fzflib
-rich
-python-vlc
-requests
