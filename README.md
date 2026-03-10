@@ -5,7 +5,7 @@ Written by Andrew Barlow ([github](https://github.com/dandrewbarlow) | [website]
 ## Description
 
 A simple CLI internet radio interface for old internet fans. Requires `fzf`,
-`cvlc`, and `curl`.
+`cvlc`, `curl`, and `jq` — no Python needed.
 
 ### Goals
 
@@ -31,23 +31,22 @@ one is mine.
 
 ## Install Dependencies
 
-Install [fzf](https://github.com/junegunn/fzf) and
-[VLC](https://www.videolan.org/vlc/) for your platform of choice.
+Install [fzf](https://github.com/junegunn/fzf),
+[VLC](https://www.videolan.org/vlc/), and
+[jq](https://jqlang.org/) for your platform of choice.
 `curl` is included in most Unix-like systems by default.
 
 ## Usage
 
-Place all internet radio stream URLs in a file called `config.txt` within the
-project directory. To include a station name, precede the URL with a comment:
+Place all internet radio stream URLs in a file called `config.json` within the
+project directory, as a JSON array of objects with `name` and `url` fields:
 
+```json
+[
+  { "name": "Station Name", "url": "https://station-url.com" },
+  { "name": "Another Station", "url": "https://another-url.com" }
+]
 ```
-# Station Name
-https://station-url.com
-```
-
-Extraneous comments will not be parsed, but any line starting with `http` will
-search the line above it for a commented name. If none is found, it will
-default to the stream URL.
 
 Run the script:
 

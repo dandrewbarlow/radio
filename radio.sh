@@ -14,20 +14,18 @@
 # Usage:
 #   ./radio.sh
 #
-# Config (config.txt):
-#   Place stream URLs in config.txt next to this script, one per line.
-#   Optionally precede a URL with a commented name:
+# Config (config.json):
+#   Place stream URLs in config.json next to this script as a JSON array:
 #
-#     # Station Name
-#     https://stream-url.com
-#
-#   Lines not starting with "http" or "#" are ignored.
-#   If no name comment is found above a URL, the URL is used as the name.
+#     [
+#       { "name": "Station Name", "url": "https://stream-url.com" },
+#       { "name": "Another Station", "url": "https://another-url.com" }
+#     ]
 
 # Check that all required external tools are installed before doing anything.
 check_dependencies() {
     local missing=()
-    for cmd in fzf cvlc curl; do
+    for cmd in fzf cvlc curl jq; do
         if ! command -v "$cmd" &>/dev/null; then
             missing+=("$cmd")
         fi
@@ -40,42 +38,30 @@ check_dependencies() {
 }
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONFIG_FILE="$SCRIPT_DIR/config.txt"
+CONFIG_FILE="$SCRIPT_DIR/config.json"
 
 # ANSI color codes
 RED='\033[31m'
 BLUE='\033[34m'
 PURPLE='\033[35m'
 RESET='\033[0m'
+BOLD='\033[1m'
+DIM='\033[2m'
 
 # Station data stored in parallel arrays, indexed together.
 # names[i] and urls[i] always refer to the same station.
 names=()
 urls=()
 
-# Parse config.txt into the names[] and urls[] arrays.
-# For each line starting with "http", check the previous line for a "# Name"
-# comment. If found, use it as the station name; otherwise fall back to the URL.
+# Parse config.json into the names[] and urls[] arrays.
+# jq extracts each object's name and url as tab-separated pairs, one per line.
 parse_stations() {
     local filepath="$1"
-    local prev=""
 
-    while IFS= read -r line; do
-        if [[ "$line" == http* ]]; then
-            local url="$line"
-            local name
-            if [[ "$prev" == "#"* ]]; then
-                # Strip leading "# " or bare "#"
-                name="${prev#\# }"
-                name="${name#\#}"
-            else
-                name="$url"
-            fi
-            names+=("$name")
-            urls+=("$url")
-        fi
-        prev="$line"
-    done < <(tr -d '\r' < "$filepath")  # tr strips Windows-style CR line endings
+    while IFS=$'\t' read -r name url; do
+        names+=("$name")
+        urls+=("$url")
+    done < <(jq -r '.[] | [.name, .url] | @tsv' "$filepath")
 }
 
 # Check that a stream URL is reachable before handing it to VLC.
@@ -102,18 +88,43 @@ verify_stream() {
 }
 
 # Print currently playing station info to the terminal.
+# Draws a full-width title bar using the terminal width from tput,
+# falling back to 60 columns if tput is unavailable.
 display_info() {
     local name="$1"
     local url="$2"
+    local width
+    width=$(tput cols 2>/dev/null || echo 60)
+
+    local title=" RADIO "
+    local title_len=${#title}
+    local left_len=$(( (width - title_len) / 2 ))
+    local right_len=$(( width - title_len - left_len ))
+
     clear
     printf "\n"
-    printf "  === Radio ===\n\n"
-    printf "  Station : ${PURPLE}%s${RESET}\n" "$name"
+
+    # Title rule: ──── RADIO ────
+    printf "${PURPLE}${BOLD}"
+    printf '%*s' "$left_len"  '' | tr ' ' '-'
+    printf "%s" "$title"
+    printf '%*s' "$right_len" '' | tr ' ' '-'
+    printf "${RESET}\n\n"
+
+    printf "  Station : ${PURPLE}${BOLD}%s${RESET}\n" "$name"
     printf "  URL     : ${BLUE}%s${RESET}\n" "$url"
     printf "\n"
-    printf "  Return to menu : ${RED}Ctrl+C${RESET}\n"
-    printf "  Quit           : ${RED}Ctrl+C${RESET} twice\n"
-    printf "\n"
+
+    # Divider
+    printf "${DIM}"
+    printf '%*s' "$width" '' | tr ' ' '-'
+    printf "${RESET}\n"
+
+    printf "  Return to menu : ${RED}Ctrl+C${RESET}   ·   Quit : 2× ${RED}Ctrl+C${RESET}\n"
+
+    printf "${DIM}"
+    printf '%*s' "$width" '' | tr ' ' '-'
+    printf "${RESET}\n\n"
 }
 
 # Verify and play a station.
